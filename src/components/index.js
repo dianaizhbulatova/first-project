@@ -1,6 +1,12 @@
+import '../pages/index.css';
+import { initialCards } from './cards.js';
+import { enableValidation }  from './validate.js';
+import { createCard} from './card.js';
+import { openModal, closeModal } from './modal.js';
+
 const profilePopup = document.querySelector('.popup_type_edit')
 const cardPopup = document.querySelector('.popup_type_new-card')
-const imagePopup = document.querySelector('.popup_type_image')
+export const imagePopup = document.querySelector('.popup_type_image')
 
 const profilePopupEditButton = document.querySelector('.profile__edit-button')
 const profilePopupClose = profilePopup.querySelector('.popup__close')
@@ -19,49 +25,16 @@ const cardFormElement = cardPopup.querySelector('.popup__form')
 const cardNameInput = cardPopup.querySelector('.popup__input_type_card-name')
 const cardLinkInput = cardPopup.querySelector('.popup__input_type_url')
 
-const imageUrlPopup = imagePopup.querySelector('.popup__image')
-const imageCaptionPopup = imagePopup.querySelector('.popup__caption')
-const imagePopupClose = imagePopup.querySelector('.popup__close')
+export const imageUrlPopup = imagePopup.querySelector('.popup__image')
+export const imageCaptionPopup = imagePopup.querySelector('.popup__caption')
+export const imagePopupClose = imagePopup.querySelector('.popup__close')
 
 const popups = document.querySelectorAll('.popup')
 popups.forEach(popup => popup.classList.add('popup_is-animated'))
 
-function openModal(popup) {
-    popup.classList.add('popup_is-opened')
-}
 
-function closeModal(popup) {
-    popup.classList.remove('popup_is-opened')
-}
 
-function functionCard (card, name, link) {
-  const deleteButton = card.querySelector('.card__delete-button')
-  const closestCard = deleteButton.closest('.card')
-  deleteButton.addEventListener('click', () => closestCard.remove())
 
-  const likeButton = card.querySelector('.card__like-button')
-  likeButton.addEventListener("click", () => likeButton.classList.toggle("card__like-button_is-active"));
-
-  const image = card.querySelector('.card__image')
-  image.addEventListener('click', () => {
-    imageUrlPopup.src = link
-    imageCaptionPopup.textContent = name
-    openModal(imagePopup)
-  })
-  imagePopupClose.addEventListener('click', () => closeModal(imagePopup))
-}
-
-const template = document.querySelector('#card-template').content; 
-
-function createCard({name, link}) {
-  const card = template.cloneNode(true);
-  const image = card.querySelector('.card__image');
-  image.src = link;
-  image.alt = name;
-  card.querySelector('.card__title').textContent = name;
-  functionCard(card, name, link)
-  return card;
-}
 
 const cards = initialCards.map(createCard)
 const places = document.querySelector('.places__list')
@@ -99,6 +72,16 @@ function handleCardFormSubmit (evt) {
 }
 
 cardFormElement.addEventListener('submit', handleCardFormSubmit)
+const validationSettings = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+}
+enableValidation(validationSettings);
+
 
 
 
